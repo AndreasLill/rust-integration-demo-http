@@ -4,11 +4,8 @@ use rust_integration_services::{http::{client::http_client::HttpClient, http_req
 async fn main() {
     tracing_subscriber::fmt().init();
 
-    // Create HTTP server configuration listening on 0.0.0.0:8080.
-    let config = HttpServerConfig::new("0.0.0.0", 8080);
-
     // Run the http server with the configuration.
-    HttpServer::new(config)
+    HttpServer::new(HttpServerConfig::new("0.0.0.0", 8080))
     .route("/xml", json_to_xml)
     .route("/proxy/{value}", httpbin_proxy)
     .route("/upload", upload)
@@ -21,10 +18,7 @@ async fn main() {
 async fn json_to_xml(request: HttpRequest) -> HttpResponse {
 
     // Read the body as bytes into memory.
-    let body = match request.body_as_bytes().await {
-        Ok(body) => body,
-        Err(err) => return HttpResponse::builder().status(400).body_bytes(err.to_string()).unwrap(),
-    };
+    let body = request.body_as_bytes().await.unwrap();
 
     // Parse and deserialize body bytes as JSON into Document struct.
     let json: serde_json::Value = match serde_json::from_slice(&body) {
@@ -69,18 +63,19 @@ async fn httpbin_proxy(request: HttpRequest) -> HttpResponse {
 // curl -i -H "key: doc.txt" --data-binary @/home/andreas/file.txt http://127.0.0.1:8080/upload
 async fn upload(request: HttpRequest) -> HttpResponse {
 
+    // Get 'key' header.
     let key = match request.headers().get("key") {
         Some(key) => key.to_owned(),
         None => return HttpResponse::builder().status(400).body_bytes("Missing header: key").unwrap(),
     };
 
-    let body = match request.body_as_bytes().await {
-        Ok(body) => body,
-        Err(err) => return HttpResponse::builder().status(400).body_bytes(err.to_string()).unwrap(),
-    };
+    // Read the body as bytes into memory.
+    let body = request.body_as_bytes().await.unwrap();
 
+    // Create S3 client config for use with minio.
     let config = S3ClientConfig::new("http://127.0.0.1:9000").access_key("minioadmin").secret_key("minioadmin");
 
+    // Put object as bytes using the S3 client.
     match S3Client::new(config).bucket("docs").put_object_bytes(key.to_str().unwrap(), body).await {
         Ok(_) => HttpResponse::builder().status(200).body_empty().unwrap(),
         Err(err) => HttpResponse::builder().status(500).body_bytes(err.to_string()).unwrap(),
@@ -90,13 +85,16 @@ async fn upload(request: HttpRequest) -> HttpResponse {
 // curl -i -H "key: doc.txt" http://127.0.0.1:8080/download
 async fn download(request: HttpRequest) -> HttpResponse {
 
+    // Get 'key' header.
     let key = match request.headers().get("key") {
         Some(key) => key.to_owned(),
         None => return HttpResponse::builder().status(400).body_bytes("Missing header: key").unwrap(),
     };
 
+    // Create S3 client config for use with minio.
     let config = S3ClientConfig::new("http://127.0.0.1:9000").access_key("minioadmin").secret_key("minioadmin");
-
+    
+    // Put object as bytes using the S3 client.
     match S3Client::new(config).bucket("docs").get_object_bytes(key.to_str().unwrap()).await {
         Ok(bytes) => HttpResponse::builder().status(200).body_bytes(bytes).unwrap(),
         Err(err) => HttpResponse::builder().status(500).body_bytes(err.to_string()).unwrap(),
