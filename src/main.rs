@@ -7,7 +7,7 @@ async fn main() {
     // Run the http server with the configuration.
     HttpServer::new(HttpServerConfig::new("0.0.0.0", 8080))
     .route("/xml", json_to_xml)
-    .route("/proxy/{value}", httpbin_proxy)
+    .route("/proxy/{value}", reverse_proxy)
     .route("/upload", upload)
     .route("/download", download)
     .run()
@@ -37,13 +37,10 @@ async fn json_to_xml(request: HttpRequest) -> HttpResponse {
 }
 
 // curl -i http://127.0.0.1:8080/proxy/helloworld
-async fn httpbin_proxy(request: HttpRequest) -> HttpResponse {
+async fn reverse_proxy(request: HttpRequest) -> HttpResponse {
 
     // Get the {value} parameter from path.
-    let value = match request.params().get("value") {
-        Some(value) => value,
-        None => return HttpResponse::builder().status(400).body_bytes("Missing 'value' parameter").unwrap(),
-    };
+    let value = request.params().get("value").unwrap();
 
     // Format canonical uri with value.
     let uri = format!("https://httpbin.org/anything/{}", value);
@@ -52,12 +49,10 @@ async fn httpbin_proxy(request: HttpRequest) -> HttpResponse {
     let req = HttpRequest::builder().uri(uri).method("GET").body_empty().unwrap();
 
     // Send the request and handle response.
-    let response = match HttpClient::new().send(req).await {
+    match HttpClient::new().send(req).await {
         Ok(response) => response,
         Err(err) => HttpResponse::builder().status(500).body_bytes(err.to_string()).unwrap(),
-    };
-    
-    response
+    }
 }
 
 // curl -i -H "key: doc.txt" --data-binary @/home/andreas/file.txt http://127.0.0.1:8080/upload
