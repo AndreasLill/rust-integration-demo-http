@@ -12,7 +12,7 @@ pub async fn upload(request: HttpRequest) -> HttpResponse {
 
     let config = S3ClientConfig::new("http://127.0.0.1:9000").access_key("minioadmin").secret_key("minioadmin");
 
-    match S3Client::new(config).bucket("docs").put_object_bytes(key.to_str().unwrap(), body).await {
+    match S3Client::new(config).bucket("files").put_object_bytes(key.to_str().unwrap(), body).await {
         Ok(_) => HttpResponse::builder().status(200).body_empty().unwrap(),
         Err(err) => HttpResponse::builder().status(500).body_bytes(err.to_string()).unwrap(),
     }
@@ -28,7 +28,7 @@ pub async fn download(request: HttpRequest) -> HttpResponse {
 
     let config = S3ClientConfig::new("http://127.0.0.1:9000").access_key("minioadmin").secret_key("minioadmin");
     
-    match S3Client::new(config).bucket("docs").get_object_bytes(key.to_str().unwrap()).await {
+    match S3Client::new(config).bucket("files").get_object_bytes(key.to_str().unwrap()).await {
         Ok(bytes) => HttpResponse::builder().status(200).body_bytes(bytes).unwrap(),
         Err(err) => HttpResponse::builder().status(500).body_bytes(err.to_string()).unwrap(),
     }
