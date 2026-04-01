@@ -8,7 +8,7 @@ pub async fn upload(request: HttpRequest) -> HttpResponse {
         None => return HttpResponse::builder().status(400).body_bytes("Missing header: key").unwrap(),
     };
 
-    let body = request.body_as_bytes().await.unwrap();
+    let body = request.body().as_bytes().await.unwrap();
 
     let config = S3ClientConfig::new("http://127.0.0.1:9000").access_key("minioadmin").secret_key("minioadmin");
 
