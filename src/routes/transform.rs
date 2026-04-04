@@ -1,6 +1,6 @@
 use rust_integration_services::http::{http_request::HttpRequest, http_response::HttpResponse};
 
-// curl -i -H "Content-Type: application/json" -d '{"bucket":"my-bucket","key":"my-key"}' http://127.0.0.1:8080/xml
+// curl -i -H "Content-Type: application/json" -d '{"name":"Andreas","id": "123456"}' http://127.0.0.1:8080/xml
 pub async fn json_to_xml(request: HttpRequest) -> HttpResponse {
 
     let body = request.body().as_bytes().await.unwrap();
