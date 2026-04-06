@@ -13,11 +13,18 @@ pub async fn upload(request: HttpRequest) -> HttpResponse {
         None => return HttpResponse::builder().status(400).body_bytes("Missing header: Key").unwrap(),
     };
 
-    let config = S3ClientConfig::new("http://127.0.0.1:9000")
+    let config = S3ClientConfig::builder()
+    .endpoint("http://127.0.0.1:9000")
     .access_key("minioadmin")
-    .secret_key("minioadmin");
+    .secret_key("minioadmin")
+    .build()
+    .unwrap();
 
-    match S3Client::new(config).bucket(bucket).put_object(key).from_stream(request.body()).await {
+    match S3Client::new(config)
+    .bucket(bucket)
+    .put_object(key)
+    .from_stream(request.body())
+    .await {
         Ok(_) => HttpResponse::builder().status(200).body_empty().unwrap(),
         Err(err) => HttpResponse::builder().status(500).body_bytes(err.to_string()).unwrap(),
     }
@@ -36,11 +43,17 @@ pub async fn download(request: HttpRequest) -> HttpResponse {
         None => return HttpResponse::builder().status(400).body_bytes("Missing header: Key").unwrap(),
     };
 
-    let config = S3ClientConfig::new("http://127.0.0.1:9000")
+    let config = S3ClientConfig::builder()
+    .endpoint("http://127.0.0.1:9000")
     .access_key("minioadmin")
-    .secret_key("minioadmin");
+    .secret_key("minioadmin")
+    .build()
+    .unwrap();
     
-    match S3Client::new(config).bucket(bucket).get_object(key).as_stream().await {
+    match S3Client::new(config)
+    .bucket(bucket)
+    .get_object(key)
+    .as_stream().await {
         Ok(stream) => HttpResponse::builder().status(200).body_stream(stream).unwrap(),
         Err(err) => HttpResponse::builder().status(500).body_bytes(err.to_string()).unwrap(),
     }

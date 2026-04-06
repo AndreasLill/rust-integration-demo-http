@@ -1468,9 +1468,9 @@ dependencies = [
 
 [[package]]
 name = "rust-integration-services"
-version = "0.5.16"
+version = "0.5.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "635551e190dc97dbab537be3ab6ebc4739522b4e66d1e648b0522aa48ec8f012"
+checksum = "c77ca9c53ca30c3f2f09e77f085adda40ef9372c680b87446e5f1fcb7466c952"
 dependencies = [
  "anyhow",
  "aws-config",
