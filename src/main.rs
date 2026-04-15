@@ -8,7 +8,7 @@ async fn main() {
 
     HttpServer::new(HttpServerConfig::new("0.0.0.0", 8080))
     .route("/xml", routes::transform::json_to_xml)
-    .route("/proxy/{value}", routes::proxy::httpbin)
+    .route("/weather/{city}", routes::proxy::weather)
     .route("/upload", routes::minio::upload)
     .route("/download", routes::minio::download)
     .route("/spec.yaml", routes::openapi::spec)

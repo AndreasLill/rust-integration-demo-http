@@ -24,33 +24,30 @@ paths:
       responses:
         "200":
           description: XML representation of the input JSON
-
         "400":
           description: Invalid JSON input
-
         "500":
           description: Failed to convert JSON to XML
-  /proxy/{value}:
+  /weather/{city}:
     get:
-      summary: Proxy request to httpbin
-      description: Takes a path parameter and forwards the request to https://httpbin.org/anything/{value}, then returns the upstream response.
-      operationId: proxyHttpbin
-
+      summary: Get current weather for a city
+      description: Returns current weather data from Open-Meteo.
+      operationId: getWeather
       parameters:
-        - name: value
+        - name: city
           in: path
           required: true
-          description: Value to forward to httpbin
+          description: A city
           schema:
             type: string
-            example: helloworld
-
+            example: Stockholm
       responses:
         "200":
-          description: Response from httpbin
-
+          description: Successful weather response
+        "400":
+          description: Could not parse geocoding data
         "500":
-          description: Upstream request failed
+          description: Internal server error
   /upload:
     post:
       summary: Upload object to S3/MinIO
@@ -90,10 +87,8 @@ paths:
       responses:
         "200":
           description: File uploaded successfully
-
         "400":
           description: Missing required headers
-
         "500":
           description: Upload failed
   /download:
@@ -123,9 +118,7 @@ paths:
       responses:
         "200":
           description: File stream returned successfully
-
         "400":
           description: Missing required headers
-
         "500":
           description: Failed to fetch object from storage
