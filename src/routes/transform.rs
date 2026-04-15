@@ -15,5 +15,5 @@ pub async fn json_to_xml(request: HttpRequest) -> HttpResponse {
         Err(_) => return HttpResponse::builder().status(500).body_bytes("Could not parse XML").unwrap(),
     };
 
-    HttpResponse::builder().status(200).body_bytes(xml).unwrap()
+    HttpResponse::builder().status(200).header("Content-Type", "text/xml").body_bytes(xml).unwrap()
 }

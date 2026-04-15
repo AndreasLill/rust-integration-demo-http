@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: Rust Integration Demo - Andreas Lill
+  version: 1.0.0
+
+paths:
+  /xml:
+    post:
+      summary: Convert JSON to XML
+      description: Accepts arbitrary JSON and converts it into XML with a root element named "Root".
+      operationId: jsonToXml
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+            example:
+              name: Andreas
+              id: "123456"
+
+      responses:
+        "200":
+          description: XML representation of the input JSON
+
+        "400":
+          description: Invalid JSON input
+
+        "500":
+          description: Failed to convert JSON to XML
+  /proxy/{value}:
+    get:
+      summary: Proxy request to httpbin
+      description: Takes a path parameter and forwards the request to https://httpbin.org/anything/{value}, then returns the upstream response.
+      operationId: proxyHttpbin
+
+      parameters:
+        - name: value
+          in: path
+          required: true
+          description: Value to forward to httpbin
+          schema:
+            type: string
+            example: helloworld
+
+      responses:
+        "200":
+          description: Response from httpbin
+
+        "500":
+          description: Upstream request failed
+  /upload:
+    post:
+      summary: Upload object to S3/MinIO
+      description: |
+        Uploads raw request body to an S3-compatible storage (MinIO).
+        Requires headers:
+        - Bucket: target bucket name
+        - Key: object key (filename)
+
+      operationId: uploadObject
+
+      parameters:
+        - name: Bucket
+          in: header
+          required: true
+          description: Target bucket name
+          schema:
+            type: string
+            example: files
+
+        - name: Key
+          in: header
+          required: true
+          description: Object key (file name)
+          schema:
+            type: string
+            example: file.txt
+
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+              example: hello world
+
+      responses:
+        "200":
+          description: File uploaded successfully
+
+        "400":
+          description: Missing required headers
+
+        "500":
+          description: Upload failed
+  /download:
+    get:
+      summary: Download object from S3/MinIO
+      description: Retrieves an object from an S3-compatible storage (MinIO) using headers for bucket and key. Returns the raw file stream.
+
+      operationId: downloadObject
+
+      parameters:
+        - name: Bucket
+          in: header
+          required: true
+          description: Target bucket name
+          schema:
+            type: string
+            example: files
+
+        - name: Key
+          in: header
+          required: true
+          description: Object key (file name)
+          schema:
+            type: string
+            example: file.txt
+
+      responses:
+        "200":
+          description: File stream returned successfully
+
+        "400":
+          description: Missing required headers
+
+        "500":
+          description: Failed to fetch object from storage

@@ -6,12 +6,13 @@ mod routes;
 async fn main() {
     tracing_subscriber::fmt().init();
 
-    // Run the http server with the configuration.
     HttpServer::new(HttpServerConfig::new("0.0.0.0", 8080))
     .route("/xml", routes::transform::json_to_xml)
     .route("/proxy/{value}", routes::proxy::httpbin)
     .route("/upload", routes::minio::upload)
     .route("/download", routes::minio::download)
+    .route("/spec.yaml", routes::openapi::spec)
+    .route("/swagger", routes::openapi::swagger)
     .run()
     .await;
 }
