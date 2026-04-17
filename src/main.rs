@@ -1,7 +1,6 @@
 use rust_integration_services::http::server::{http_server::HttpServer, http_server_config::HttpServerConfig};
 
 mod routes;
-mod middleware;
 
 #[tokio::main]
 async fn main() {
