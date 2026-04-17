@@ -4,10 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-rust-integration-services = { version = "0.5.21", features = ["http", "s3", "file"] }
+rust-integration-services = { version = "0.5.22", features = ["http", "s3", "file"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 quick-xml = { version = "0.39.2", features = ["serialize"] }
-tokio = { version = "1.52.0", features = ["full"] }
+tokio = { version = "1.52.1", features = ["full"] }
 tracing = "0.1.44"
 tracing-subscriber = "0.3.23"
