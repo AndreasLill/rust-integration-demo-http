@@ -22,7 +22,7 @@ pub async fn weather(request: HttpRequest) -> HttpResponse {
     let req = HttpRequest::builder().get(uri).body_empty().unwrap();
     let response = HttpClient::new().send(req).await.unwrap();
 
-    let body = &response.body().as_bytes().await.unwrap();
+    let body = response.body().as_bytes().await.unwrap();
     let geocoding: GeocodingResponse = serde_json::from_slice(&body).unwrap();
     let first = geocoding.results.get(0).unwrap();
     
