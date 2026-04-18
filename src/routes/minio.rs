@@ -20,12 +20,8 @@ pub async fn upload(request: HttpRequest) -> HttpResponse {
     .build()
     .unwrap();
 
-    let response = match S3Client::new(config).bucket(bucket).put_object(key).from_stream(request.body()).await {
-        Ok(_) => HttpResponse::builder().status(200).body_empty().unwrap(),
-        Err(err) => HttpResponse::builder().status(500).body_bytes(err.to_string()).unwrap(),
-    };
-
-    response
+    let _response = S3Client::new(config).bucket(bucket).put_object(key).from_stream(request.body()).await.unwrap();
+    HttpResponse::builder().status(200).body_empty().unwrap()
 }
 
 // curl -i -H "Bucket: files" -H "Key: file.txt" http://127.0.0.1:8080/download
@@ -48,10 +44,6 @@ pub async fn download(request: HttpRequest) -> HttpResponse {
     .build()
     .unwrap();
     
-    let response = match S3Client::new(config).bucket(bucket).get_object(key).as_stream().await {
-        Ok(stream) => HttpResponse::builder().status(200).body_stream(stream).unwrap(),
-        Err(err) => HttpResponse::builder().status(500).body_bytes(err.to_string()).unwrap(),
-    };
-
-    response
+    let stream = S3Client::new(config).bucket(bucket).get_object(key).as_stream().await.unwrap();
+    HttpResponse::builder().status(200).body_stream(stream).unwrap()
 }

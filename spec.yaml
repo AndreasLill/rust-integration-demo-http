@@ -27,7 +27,7 @@ paths:
         "400":
           description: Invalid JSON input
         "500":
-          description: Failed to convert JSON to XML
+          description: Internal server error
   /weather/{city}:
     get:
       summary: Get current weather for a city
@@ -44,18 +44,12 @@ paths:
       responses:
         "200":
           description: Successful weather response
-        "400":
-          description: Could not parse geocoding data
         "500":
           description: Internal server error
   /upload:
     post:
       summary: Upload object to S3/MinIO
-      description: |
-        Uploads raw request body to an S3-compatible storage (MinIO).
-        Requires headers:
-        - Bucket: target bucket name
-        - Key: object key (filename)
+      description: Uploads an object to an S3-compatible storage (MinIO).
 
       operationId: uploadObject
 
@@ -90,7 +84,7 @@ paths:
         "400":
           description: Missing required headers
         "500":
-          description: Upload failed
+          description: Internal server error
   /download:
     get:
       summary: Download object from S3/MinIO
@@ -121,4 +115,4 @@ paths:
         "400":
           description: Missing required headers
         "500":
-          description: Failed to fetch object from storage
+          description: Internal server error
