@@ -6,6 +6,7 @@ struct GeocodingResponse {
     results: Vec<Location>,
 }
 
+#[allow(unused)]
 #[derive(Debug, Deserialize)]
 struct Location {
     name: String,
