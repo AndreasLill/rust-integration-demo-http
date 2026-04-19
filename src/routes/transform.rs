@@ -5,12 +5,12 @@ pub async fn json_to_xml(request: HttpRequest) -> HttpResponse {
 
     let body = request.body().as_bytes().await.unwrap();
 
-    match serde_json::from_slice::<serde_json::Value>(&body) {
-        Ok(json) => {
-            let xml = quick_xml::se::to_string_with_root("Root", &json).unwrap();
-            let xml = format!("<?xml version=\"1.0\" encoding=\"UTF-8\"?>{}", xml);
-            HttpResponse::builder().status(200).header("Content-Type", "text/xml").body_bytes(xml).unwrap()
-        },
-        Err(_) => HttpResponse::builder().status(400).body_bytes("Invalid JSON").unwrap(),
-    }
+    let json: serde_json::Value = match serde_json::from_slice(&body) {
+        Ok(json) => json,
+        Err(_) => return HttpResponse::builder().status(400).body_bytes("Invalid JSON").unwrap(),
+    };
+
+    let xml = quick_xml::se::to_string_with_root("Root", &json).unwrap();
+    let xml = format!("<?xml version=\"1.0\" encoding=\"UTF-8\"?>{}", xml);
+    HttpResponse::builder().status(200).header("Content-Type", "text/xml").body_bytes(xml).unwrap()
 }
