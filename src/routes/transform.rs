@@ -10,7 +10,10 @@ pub async fn json_to_xml(request: HttpRequest) -> HttpResponse {
         Err(_) => return HttpResponse::builder().status(400).body_bytes("Invalid JSON").unwrap(),
     };
 
-    let xml = quick_xml::se::to_string_with_root("Root", &json).unwrap();
-    let xml = format!("<?xml version=\"1.0\" encoding=\"UTF-8\"?>{}", xml);
+    let xml = match quick_xml::se::to_string_with_root("Root", &json) {
+        Ok(xml) => format!("<?xml version=\"1.0\" encoding=\"UTF-8\"?>{}", xml),
+        Err(_) => return HttpResponse::builder().status(500).body_bytes("Could not parse to XML").unwrap(),
+    };
+
     HttpResponse::builder().status(200).header("Content-Type", "text/xml").body_bytes(xml).unwrap()
 }
