@@ -54,7 +54,7 @@ paths:
       operationId: uploadObject
 
       parameters:
-        - name: Bucket
+        - name: bucket
           in: header
           required: true
           description: Target bucket name
@@ -62,7 +62,7 @@ paths:
             type: string
             example: files
 
-        - name: Key
+        - name: key
           in: header
           required: true
           description: Object key (file name)
@@ -93,7 +93,7 @@ paths:
       operationId: downloadObject
 
       parameters:
-        - name: Bucket
+        - name: bucket
           in: header
           required: true
           description: Target bucket name
@@ -101,7 +101,7 @@ paths:
             type: string
             example: files
 
-        - name: Key
+        - name: key
           in: header
           required: true
           description: Object key (file name)

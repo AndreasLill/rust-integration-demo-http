@@ -5,22 +5,22 @@ use rust_integration_services::{
 
 // curl -i -H "Bucket: files" -H "Key: file.txt" --data-binary @/home/andreas/file.txt http://127.0.0.1:8080/upload
 pub async fn upload(request: HttpRequest) -> HttpResponse {
-    let bucket = match request.header("Bucket") {
-        Some(bucket) => bucket,
+    let bucket = match request.header("bucket") {
+        Some(bucket) => bucket.to_str().unwrap(),
         None => {
             return HttpResponse::builder()
                 .status(400)
-                .body_bytes("Missing header: Bucket")
+                .body_bytes("Missing header: bucket")
                 .unwrap();
         }
     };
 
-    let key = match request.header("Key") {
-        Some(key) => key,
+    let key = match request.header("key") {
+        Some(key) => key.to_str().unwrap(),
         None => {
             return HttpResponse::builder()
                 .status(400)
-                .body_bytes("Missing header: Key")
+                .body_bytes("Missing header: key")
                 .unwrap();
         }
     };
@@ -48,22 +48,22 @@ pub async fn upload(request: HttpRequest) -> HttpResponse {
 
 // curl -i -H "Bucket: files" -H "Key: file.txt" http://127.0.0.1:8080/download
 pub async fn download(request: HttpRequest) -> HttpResponse {
-    let bucket = match request.header("Bucket") {
-        Some(bucket) => bucket,
+    let bucket = match request.header("bucket") {
+        Some(bucket) => bucket.to_str().unwrap(),
         None => {
             return HttpResponse::builder()
                 .status(400)
-                .body_bytes("Missing header: Bucket")
+                .body_bytes("Missing header: bucket")
                 .unwrap();
         }
     };
 
-    let key = match request.header("Key") {
-        Some(key) => key,
+    let key = match request.header("key") {
+        Some(key) => key.to_str().unwrap(),
         None => {
             return HttpResponse::builder()
                 .status(400)
-                .body_bytes("Missing header: Key")
+                .body_bytes("Missing header: key")
                 .unwrap();
         }
     };

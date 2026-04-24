@@ -1467,9 +1467,9 @@ dependencies = [
 
 [[package]]
 name = "rust-integration-services"
-version = "0.5.25"
+version = "0.5.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13835834ac6f0c3dbec8baee9bba74dc31fa789c2917f3b61b792aebdca268e7"
+checksum = "4ce17576abe61e194139aa1391f91b8f6d54d1a3826bdc53818ad8eee67c6cfa"
 dependencies = [
  "anyhow",
  "aws-config",
@@ -1544,9 +1544,9 @@ dependencies = [
 
 [[package]]
 name = "rustls-pki-types"
-version = "1.14.0"
+version = "1.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "be040f8b0a225e40375822a563fa9524378b9d63112f53e19ffff34df5d33fdd"
+checksum = "30a7197ae7eb376e574fe940d068c30fe0462554a3ddbe4eca7838e049c937a9"
 dependencies = [
  "zeroize",
 ]
