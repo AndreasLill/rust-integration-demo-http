@@ -291,7 +291,7 @@ dependencies = [
  "hyper-util",
  "pin-project-lite",
  "rustls 0.21.12",
- "rustls 0.23.38",
+ "rustls 0.23.39",
  "rustls-native-certs",
  "rustls-pki-types",
  "tokio",
@@ -1001,7 +1001,7 @@ dependencies = [
  "hyper 1.9.0",
  "hyper-util",
  "log",
- "rustls 0.23.38",
+ "rustls 0.23.39",
  "rustls-native-certs",
  "tokio",
  "tokio-rustls 0.26.4",
@@ -1467,9 +1467,9 @@ dependencies = [
 
 [[package]]
 name = "rust-integration-services"
-version = "0.5.24"
+version = "0.5.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "abfd49cef4e77bc10c710bf8589501f402c5f7c8f96803263ace09b353a3d246"
+checksum = "13835834ac6f0c3dbec8baee9bba74dc31fa789c2917f3b61b792aebdca268e7"
 dependencies = [
  "anyhow",
  "aws-config",
@@ -1483,7 +1483,7 @@ dependencies = [
  "hyper-util",
  "matchit",
  "regex",
- "rustls 0.23.38",
+ "rustls 0.23.39",
  "rustls-native-certs",
  "rustls-pki-types",
  "tokio",
@@ -1516,9 +1516,9 @@ dependencies = [
 
 [[package]]
 name = "rustls"
-version = "0.23.38"
+version = "0.23.39"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69f9466fb2c14ea04357e91413efb882e2a6d4a406e625449bc0a5d360d53a21"
+checksum = "7c2c118cb077cca2822033836dfb1b975355dfb784b5e8da48f7b6c5db74e60e"
 dependencies = [
  "aws-lc-rs",
  "log",
@@ -1915,7 +1915,7 @@ version = "0.26.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1729aa945f29d91ba541258c8df89027d5792d85a8841fb65e8bf0f4ede4ef61"
 dependencies = [
- "rustls 0.23.38",
+ "rustls 0.23.39",
  "tokio",
 ]
 
