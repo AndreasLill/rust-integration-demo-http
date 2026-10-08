@@ -14,7 +14,15 @@ async fn main() {
         .route("/upload", routes::minio::upload)
         .route("/download", routes::minio::download)
         .route("/spec.yaml", routes::openapi::spec)
-        .route("/swagger", routes::openapi::swagger)
+        .route("/", routes::openapi::swagger)
+        .before(async move |req| {
+            tracing::info!("{} {}", req.method(), req.path().to_string());
+            req
+        })
+        .after(async move |res| {
+            tracing::info!("{}", res.status());
+            res
+        })
         .build()
         .run()
         .await;
